@@ -12,7 +12,8 @@ fn main() {
     let client = reqwest::blocking::Client::new();
     log::warn!("App started!");
 
-    let auth = pork::authenticate::authenticate(&client, &opts);
+    let Options { secret_api_key, api_key, .. } = &opts;
+    let auth = pork::authenticate::authenticate(&client, pork::AUTHENTICATE_PORKBUN_HOST, &secret_api_key, &api_key);
     if let Ok(ip) = auth {
         log::info!("Current ip address is: {:?}", ip);
         pork::modify::modify(&client, &opts, &ip);
